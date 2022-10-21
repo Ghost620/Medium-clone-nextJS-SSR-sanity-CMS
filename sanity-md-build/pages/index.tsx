@@ -1,9 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import Header from '../components/Header'
 import { sanityClient, urlFor } from '../sanity'
+import { Post } from '../typings'
 
-const Home: NextPage = () => {
+interface Props {
+  posts: [Post];
+}
+
+const Home = ({ posts }: Props) => {
+  console.log(posts)
   return (
     <div className="max-w-7xl mx-auto">
 
@@ -23,6 +30,30 @@ const Home: NextPage = () => {
 
         <img className='hidden md:inline-flex h-32 lg:h-full' src='https://accountabilitylab.org/wp-content/uploads/2020/03/Medium-logo.png' alt=''/>
         
+      </div>
+
+      <div className='grid grid-cols-1 sm:'>
+        {posts.map((post) => (
+
+          <Link href={`/post/${post.slug.current}`} key={post._id}>
+
+            <div className=''>
+              <img src={urlFor(post.mainImage).url()!} alt='' />
+
+              <div className='flex justify-between p-5 bg-white'>
+
+                <div>
+                  <p>{post.title}</p>
+                  <p>{post.description} by {post.author.name}</p>
+                </div>
+
+                <img className='h-12 w-12 rounded-full' src={urlFor(post.author.image).url()!} alt='' />
+
+              </div>
+            </div>
+            
+          </Link>
+        ))}
       </div>
 
     </div>
